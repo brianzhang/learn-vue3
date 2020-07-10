@@ -8,7 +8,7 @@ import startBtn from '../../assets/startBtn.png';
 
 export default defineComponent({
   props: ["handleNextPage"],
-  steup(props, ctx) {
+  setup(props, ctx) {
     console.log('end page....')
     const handleStartGame = ()=> {
       props.handleNextPage(PAGE.play)

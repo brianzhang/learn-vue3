@@ -58,9 +58,10 @@ export const rootOps = {
     if (key === "on" || key === "texture" || key === "style") {
       switch (key) {
         case "on":
-          Object.keys(nextValue).forEach((eventName) => {
+          Object.keys(nextValue).forEach((eventName) => {            
             const callback = nextValue[eventName];
-            el.on(eventName, callback);
+            console.log(eventName, callback, nextValue)
+            callback && el.on(eventName, callback);
           });
           break;
         case "texture":
@@ -96,7 +97,16 @@ export const rootOps = {
     node.nodeValue = text;
   },
   parentNode: (node) => node.parentNode,
-  nextSibling: (node) => node.nextSibling
+  nextSibling: (node) => node.nextSibling,
+  querySelector: (selector) => doc.querySelector(selector),
+
+  setScopeId(el, id) {
+    el.setAttribute(id, "");
+  },
+
+  cloneNode(el) {
+    return el.cloneNode(true);
+  }
 }
 
 export const hitTestRectangle = (objectA, objectB)=> {

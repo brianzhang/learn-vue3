@@ -4,12 +4,12 @@ import {
   onUnmounted,
   defineComponent
 } from '@vue/runtime-core';
-import * as PIXI from "pixi.js";
+// import * as PIXI from "pixi.js";
+import PIXI from 'pixi-sound';
 import { getGame } from '../Game';
 import { PAGE } from '../page';
 import startPage from '../../assets/start_page.jpg';
 import startBtn from '../../assets/startBtn.png';
-import bgm from '../../assets/bgm.mp3';
 
 export default defineComponent({
   props: ["handleNextPage"],
@@ -18,15 +18,12 @@ export default defineComponent({
     const handleStartGame = ()=> {
       props.handleNextPage(PAGE.play)
     }
-    onMounted(()=> {
-      // starBg.play()
-      // getGame().sound.Sound.from(bgm)
-    })
     return {
       handleStartGame
     }
   },
   render(ctx) {
+    console.log(ctx)
     return h("Container",
       [
         h("Sprite", {texture: startPage}),

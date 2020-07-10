@@ -5,6 +5,7 @@ import {
   onUnmounted,
   defineComponent
 } from '@vue/runtime-core';
+import PIXI from 'pixi-sound';
 import { PAGE } from '../page';
 import { getGame } from '../Game';
 import Map from '../component/Map';
@@ -17,7 +18,6 @@ import { moveBullets } from '../utils/moveBullets';
 import { moveEnemyPlane } from '../utils/moveEnemyPlane';
 import EnemyPlane, {EnemyPlaneInfo} from "../component/EnemyPlane";
 import Bullet, {SelfBulletInfo, EnemyBulletInfo} from "../component/Bullet";
-
 
 let hashCode = 0;
 const createHashCode = () => {
@@ -219,7 +219,6 @@ const useFighting = ({
 export default defineComponent({
   props: ["handleNextPage"],
   setup(props) {
-    console.log('start game.')
     const selfPlane = useSelfPlane({
       x: GAME_CONFIG.width / 2 - 60,
       y: GAME_CONFIG.height,
