@@ -29,6 +29,7 @@ const App = defineComponent({
     }
   },
   render(ctx) {
+    console.log(ctx.currentPage)
     return h('Container', [
       h(ctx.currentPage, {handleNextPage: ctx.handleNextPage})
     ])

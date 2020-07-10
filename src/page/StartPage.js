@@ -1,19 +1,27 @@
 import {
   h,
-  defineComponent,
-  defineAsyncComponent
+  onMounted,
+  onUnmounted,
+  defineComponent
 } from '@vue/runtime-core';
+import * as PIXI from "pixi.js";
+import { getGame } from '../Game';
 import { PAGE } from '../page';
 import startPage from '../../assets/start_page.jpg';
 import startBtn from '../../assets/startBtn.png';
+import bgm from '../../assets/bgm.mp3';
 
 export default defineComponent({
   props: ["handleNextPage"],
   setup(props, ctx) {
+    // const starBg = PIXI.sound.Sound.from(bgm)
     const handleStartGame = ()=> {
-      console.log('handleStartGame')
       props.handleNextPage(PAGE.play)
     }
+    onMounted(()=> {
+      // starBg.play()
+      // getGame().sound.Sound.from(bgm)
+    })
     return {
       handleStartGame
     }

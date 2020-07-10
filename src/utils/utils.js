@@ -47,6 +47,12 @@ export const rootOps = {
   insert: (el, parent)=> {
     parent.addChild(el)
   },
+  remove: (child) => {
+    const parent = child.parent;
+    if (parent) {
+      parent.removeChild(child);
+    }
+  },
   patchProp: (el, key, pervValue, nextValue)=> {
     
     if (key === "on" || key === "texture" || key === "style") {
@@ -93,6 +99,11 @@ export const rootOps = {
   nextSibling: (node) => node.nextSibling
 }
 
-export const hitTestRectangle = ()=> {
-  
+export const hitTestRectangle = (objectA, objectB)=> {
+  return (
+    objectA.x + objectA.width > objectB.x &&
+    objectA.x < objectB.x + objectB.width &&
+    objectA.y + objectA.height > objectB.y &&
+    objectA.y < objectB.y + objectB.height
+  );  
 }

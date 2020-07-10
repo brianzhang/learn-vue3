@@ -5,11 +5,11 @@ import {
   onUnmounted,
   defineComponent
 } from '@vue/runtime-core';
-
+import { PAGE } from '../page';
 import { getGame } from '../Game';
 import Map from '../component/Map';
 import TWEEN from "@tweenjs/tween.js";
-import Plane from "../component/Plane";
+import Plane, {PlaneInfo} from "../component/Plane";
 import { useKeyboardMove } from "../methods";
 import { GAME_CONFIG } from "../utils/constate";
 import { hitTestRectangle } from '../utils/utils';
@@ -208,16 +208,16 @@ const useFighting = ({
   };
 
   onUnmounted(() => {
-    game.ticker.remove(handleTicker);
+    getGame().ticker.remove(handleTicker);
   });
 
   onMounted(() => {
-    game.ticker.add(handleTicker);
+    getGame().ticker.add(handleTicker);
   });
 };
 
 export default defineComponent({
-  props: ["onNextPage"],
+  props: ["handleNextPage"],
   setup(props) {
     console.log('start game.')
     const selfPlane = useSelfPlane({
@@ -245,7 +245,7 @@ export default defineComponent({
       enemyPlanes,
       enemyPlaneBullets,
       gameOverCallback() {
-        props.onNextPage(PAGE.end);
+        props.handleNextPage(PAGE.over);
       },
     });
 

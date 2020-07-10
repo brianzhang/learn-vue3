@@ -86,6 +86,45 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./assets/bgm.mp3":
+/*!************************!*\
+  !*** ./assets/bgm.mp3 ***!
+  \************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (".//images/052965e526f6a977baf762841b4fbbba.mp3");
+
+/***/ }),
+
+/***/ "./assets/bullet.png":
+/*!***************************!*\
+  !*** ./assets/bullet.png ***!
+  \***************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (".//images/08a85d1a7975f69f2e7ea00140f681ec.png");
+
+/***/ }),
+
+/***/ "./assets/enemy.png":
+/*!**************************!*\
+  !*** ./assets/enemy.png ***!
+  \**************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (".//images/08edc0e9ed8ec25df8b514206ae5d5ee.png");
+
+/***/ }),
+
 /***/ "./assets/map.jpg":
 /*!************************!*\
   !*** ./assets/map.jpg ***!
@@ -96,6 +135,19 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = (".//images/754ea27eee18ca36b63c2e27d1b10dee.jpg");
+
+/***/ }),
+
+/***/ "./assets/plane.png":
+/*!**************************!*\
+  !*** ./assets/plane.png ***!
+  \**************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (".//images/528536af4a5148e1cf8adab1e13ff172.png");
 
 /***/ }),
 
@@ -35632,6 +35684,812 @@ function getResolutionOfUrl(url, defaultValue) {
 
 /***/ }),
 
+/***/ "./node_modules/@tweenjs/tween.js/dist/tween.esm.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@tweenjs/tween.js/dist/tween.esm.js ***!
+  \**********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(process) {var NOW;
+// Include a performance.now polyfill.
+// In node.js, use process.hrtime.
+// eslint-disable-next-line
+// @ts-ignore
+if (typeof self === 'undefined' && typeof process !== 'undefined' && process.hrtime) {
+    NOW = function () {
+        // eslint-disable-next-line
+        // @ts-ignore
+        var time = process.hrtime();
+        // Convert [seconds, nanoseconds] to milliseconds.
+        return time[0] * 1000 + time[1] / 1000000;
+    };
+}
+// In a browser, use self.performance.now if it is available.
+else if (typeof self !== 'undefined' && self.performance !== undefined && self.performance.now !== undefined) {
+    // This must be bound, because directly assigning this function
+    // leads to an invocation exception in Chrome.
+    NOW = self.performance.now.bind(self.performance);
+}
+// Use Date.now if it is available.
+else if (Date.now !== undefined) {
+    NOW = Date.now;
+}
+// Otherwise, use 'new Date().getTime()'.
+else {
+    NOW = function () {
+        return new Date().getTime();
+    };
+}
+var NOW$1 = NOW;
+
+/**
+ * Controlling groups of tweens
+ *
+ * Using the TWEEN singleton to manage your tweens can cause issues in large apps with many components.
+ * In these cases, you may want to create your own smaller groups of tween
+ */
+var Group = /** @class */ (function () {
+    function Group() {
+        this._tweens = {};
+        this._tweensAddedDuringUpdate = {};
+    }
+    Group.prototype.getAll = function () {
+        var _this = this;
+        return Object.keys(this._tweens).map(function (tweenId) {
+            return _this._tweens[tweenId];
+        });
+    };
+    Group.prototype.removeAll = function () {
+        this._tweens = {};
+    };
+    Group.prototype.add = function (tween) {
+        this._tweens[tween.getId()] = tween;
+        this._tweensAddedDuringUpdate[tween.getId()] = tween;
+    };
+    Group.prototype.remove = function (tween) {
+        delete this._tweens[tween.getId()];
+        delete this._tweensAddedDuringUpdate[tween.getId()];
+    };
+    Group.prototype.update = function (time, preserve) {
+        var tweenIds = Object.keys(this._tweens);
+        if (tweenIds.length === 0) {
+            return false;
+        }
+        time = time !== undefined ? time : NOW$1();
+        // Tweens are updated in "batches". If you add a new tween during an
+        // update, then the new tween will be updated in the next batch.
+        // If you remove a tween during an update, it may or may not be updated.
+        // However, if the removed tween was added during the current batch,
+        // then it will not be updated.
+        while (tweenIds.length > 0) {
+            this._tweensAddedDuringUpdate = {};
+            for (var i = 0; i < tweenIds.length; i++) {
+                var tween = this._tweens[tweenIds[i]];
+                if (tween && tween.update(time) === false && !preserve) {
+                    delete this._tweens[tweenIds[i]];
+                }
+            }
+            tweenIds = Object.keys(this._tweensAddedDuringUpdate);
+        }
+        return true;
+    };
+    return Group;
+}());
+
+/**
+ * The Ease class provides a collection of easing functions for use with tween.js.
+ */
+var Easing = {
+    Linear: {
+        None: function (amount) {
+            return amount;
+        },
+    },
+    Quadratic: {
+        In: function (amount) {
+            return amount * amount;
+        },
+        Out: function (amount) {
+            return amount * (2 - amount);
+        },
+        InOut: function (amount) {
+            if ((amount *= 2) < 1) {
+                return 0.5 * amount * amount;
+            }
+            return -0.5 * (--amount * (amount - 2) - 1);
+        },
+    },
+    Cubic: {
+        In: function (amount) {
+            return amount * amount * amount;
+        },
+        Out: function (amount) {
+            return --amount * amount * amount + 1;
+        },
+        InOut: function (amount) {
+            if ((amount *= 2) < 1) {
+                return 0.5 * amount * amount * amount;
+            }
+            return 0.5 * ((amount -= 2) * amount * amount + 2);
+        },
+    },
+    Quartic: {
+        In: function (amount) {
+            return amount * amount * amount * amount;
+        },
+        Out: function (amount) {
+            return 1 - --amount * amount * amount * amount;
+        },
+        InOut: function (amount) {
+            if ((amount *= 2) < 1) {
+                return 0.5 * amount * amount * amount * amount;
+            }
+            return -0.5 * ((amount -= 2) * amount * amount * amount - 2);
+        },
+    },
+    Quintic: {
+        In: function (amount) {
+            return amount * amount * amount * amount * amount;
+        },
+        Out: function (amount) {
+            return --amount * amount * amount * amount * amount + 1;
+        },
+        InOut: function (amount) {
+            if ((amount *= 2) < 1) {
+                return 0.5 * amount * amount * amount * amount * amount;
+            }
+            return 0.5 * ((amount -= 2) * amount * amount * amount * amount + 2);
+        },
+    },
+    Sinusoidal: {
+        In: function (amount) {
+            return 1 - Math.cos((amount * Math.PI) / 2);
+        },
+        Out: function (amount) {
+            return Math.sin((amount * Math.PI) / 2);
+        },
+        InOut: function (amount) {
+            return 0.5 * (1 - Math.cos(Math.PI * amount));
+        },
+    },
+    Exponential: {
+        In: function (amount) {
+            return amount === 0 ? 0 : Math.pow(1024, amount - 1);
+        },
+        Out: function (amount) {
+            return amount === 1 ? 1 : 1 - Math.pow(2, -10 * amount);
+        },
+        InOut: function (amount) {
+            if (amount === 0) {
+                return 0;
+            }
+            if (amount === 1) {
+                return 1;
+            }
+            if ((amount *= 2) < 1) {
+                return 0.5 * Math.pow(1024, amount - 1);
+            }
+            return 0.5 * (-Math.pow(2, -10 * (amount - 1)) + 2);
+        },
+    },
+    Circular: {
+        In: function (amount) {
+            return 1 - Math.sqrt(1 - amount * amount);
+        },
+        Out: function (amount) {
+            return Math.sqrt(1 - --amount * amount);
+        },
+        InOut: function (amount) {
+            if ((amount *= 2) < 1) {
+                return -0.5 * (Math.sqrt(1 - amount * amount) - 1);
+            }
+            return 0.5 * (Math.sqrt(1 - (amount -= 2) * amount) + 1);
+        },
+    },
+    Elastic: {
+        In: function (amount) {
+            if (amount === 0) {
+                return 0;
+            }
+            if (amount === 1) {
+                return 1;
+            }
+            return -Math.pow(2, 10 * (amount - 1)) * Math.sin((amount - 1.1) * 5 * Math.PI);
+        },
+        Out: function (amount) {
+            if (amount === 0) {
+                return 0;
+            }
+            if (amount === 1) {
+                return 1;
+            }
+            return Math.pow(2, -10 * amount) * Math.sin((amount - 0.1) * 5 * Math.PI) + 1;
+        },
+        InOut: function (amount) {
+            if (amount === 0) {
+                return 0;
+            }
+            if (amount === 1) {
+                return 1;
+            }
+            amount *= 2;
+            if (amount < 1) {
+                return -0.5 * Math.pow(2, 10 * (amount - 1)) * Math.sin((amount - 1.1) * 5 * Math.PI);
+            }
+            return 0.5 * Math.pow(2, -10 * (amount - 1)) * Math.sin((amount - 1.1) * 5 * Math.PI) + 1;
+        },
+    },
+    Back: {
+        In: function (amount) {
+            var s = 1.70158;
+            return amount * amount * ((s + 1) * amount - s);
+        },
+        Out: function (amount) {
+            var s = 1.70158;
+            return --amount * amount * ((s + 1) * amount + s) + 1;
+        },
+        InOut: function (amount) {
+            var s = 1.70158 * 1.525;
+            if ((amount *= 2) < 1) {
+                return 0.5 * (amount * amount * ((s + 1) * amount - s));
+            }
+            return 0.5 * ((amount -= 2) * amount * ((s + 1) * amount + s) + 2);
+        },
+    },
+    Bounce: {
+        In: function (amount) {
+            return 1 - Easing.Bounce.Out(1 - amount);
+        },
+        Out: function (amount) {
+            if (amount < 1 / 2.75) {
+                return 7.5625 * amount * amount;
+            }
+            else if (amount < 2 / 2.75) {
+                return 7.5625 * (amount -= 1.5 / 2.75) * amount + 0.75;
+            }
+            else if (amount < 2.5 / 2.75) {
+                return 7.5625 * (amount -= 2.25 / 2.75) * amount + 0.9375;
+            }
+            else {
+                return 7.5625 * (amount -= 2.625 / 2.75) * amount + 0.984375;
+            }
+        },
+        InOut: function (amount) {
+            if (amount < 0.5) {
+                return Easing.Bounce.In(amount * 2) * 0.5;
+            }
+            return Easing.Bounce.Out(amount * 2 - 1) * 0.5 + 0.5;
+        },
+    },
+};
+
+/**
+ *
+ */
+var Interpolation = {
+    Linear: function (v, k) {
+        var m = v.length - 1;
+        var f = m * k;
+        var i = Math.floor(f);
+        var fn = Interpolation.Utils.Linear;
+        if (k < 0) {
+            return fn(v[0], v[1], f);
+        }
+        if (k > 1) {
+            return fn(v[m], v[m - 1], m - f);
+        }
+        return fn(v[i], v[i + 1 > m ? m : i + 1], f - i);
+    },
+    Bezier: function (v, k) {
+        var b = 0;
+        var n = v.length - 1;
+        var pw = Math.pow;
+        var bn = Interpolation.Utils.Bernstein;
+        for (var i = 0; i <= n; i++) {
+            b += pw(1 - k, n - i) * pw(k, i) * v[i] * bn(n, i);
+        }
+        return b;
+    },
+    CatmullRom: function (v, k) {
+        var m = v.length - 1;
+        var f = m * k;
+        var i = Math.floor(f);
+        var fn = Interpolation.Utils.CatmullRom;
+        if (v[0] === v[m]) {
+            if (k < 0) {
+                i = Math.floor((f = m * (1 + k)));
+            }
+            return fn(v[(i - 1 + m) % m], v[i], v[(i + 1) % m], v[(i + 2) % m], f - i);
+        }
+        else {
+            if (k < 0) {
+                return v[0] - (fn(v[0], v[0], v[1], v[1], -f) - v[0]);
+            }
+            if (k > 1) {
+                return v[m] - (fn(v[m], v[m], v[m - 1], v[m - 1], f - m) - v[m]);
+            }
+            return fn(v[i ? i - 1 : 0], v[i], v[m < i + 1 ? m : i + 1], v[m < i + 2 ? m : i + 2], f - i);
+        }
+    },
+    Utils: {
+        Linear: function (p0, p1, t) {
+            return (p1 - p0) * t + p0;
+        },
+        Bernstein: function (n, i) {
+            var fc = Interpolation.Utils.Factorial;
+            return fc(n) / fc(i) / fc(n - i);
+        },
+        Factorial: (function () {
+            var a = [1];
+            return function (n) {
+                var s = 1;
+                if (a[n]) {
+                    return a[n];
+                }
+                for (var i = n; i > 1; i--) {
+                    s *= i;
+                }
+                a[n] = s;
+                return s;
+            };
+        })(),
+        CatmullRom: function (p0, p1, p2, p3, t) {
+            var v0 = (p2 - p0) * 0.5;
+            var v1 = (p3 - p1) * 0.5;
+            var t2 = t * t;
+            var t3 = t * t2;
+            return (2 * p1 - 2 * p2 + v0 + v1) * t3 + (-3 * p1 + 3 * p2 - 2 * v0 - v1) * t2 + v0 * t + p1;
+        },
+    },
+};
+
+/**
+ * Utils
+ */
+var Sequence = /** @class */ (function () {
+    function Sequence() {
+    }
+    Sequence.nextId = function () {
+        return Sequence._nextId++;
+    };
+    Sequence._nextId = 0;
+    return Sequence;
+}());
+
+/**
+ * Tween.js - Licensed under the MIT license
+ * https://github.com/tweenjs/tween.js
+ * ----------------------------------------------
+ *
+ * See https://github.com/tweenjs/tween.js/graphs/contributors for the full list of contributors.
+ * Thank you all, you're awesome!
+ */
+var Tween = /** @class */ (function () {
+    function Tween(_object, _group) {
+        if (_group === void 0) { _group = TWEEN; }
+        this._object = _object;
+        this._group = _group;
+        this._isPaused = false;
+        this._pauseStart = 0;
+        this._valuesStart = {};
+        this._valuesEnd = {};
+        this._valuesStartRepeat = {};
+        this._duration = 1000;
+        this._initialRepeat = 0;
+        this._repeat = 0;
+        this._yoyo = false;
+        this._isPlaying = false;
+        this._reversed = false;
+        this._delayTime = 0;
+        this._startTime = 0;
+        this._easingFunction = TWEEN.Easing.Linear.None;
+        this._interpolationFunction = TWEEN.Interpolation.Linear;
+        this._chainedTweens = [];
+        this._onStartCallbackFired = false;
+        this._id = TWEEN.nextId();
+        this._isChainStopped = false;
+    }
+    Tween.prototype.getId = function () {
+        return this._id;
+    };
+    Tween.prototype.isPlaying = function () {
+        return this._isPlaying;
+    };
+    Tween.prototype.isPaused = function () {
+        return this._isPaused;
+    };
+    Tween.prototype.to = function (properties, duration) {
+        for (var prop in properties) {
+            this._valuesEnd[prop] = properties[prop];
+        }
+        if (duration !== undefined) {
+            this._duration = duration;
+        }
+        return this;
+    };
+    Tween.prototype.duration = function (d) {
+        this._duration = d;
+        return this;
+    };
+    Tween.prototype.start = function (time) {
+        if (this._isPlaying) {
+            return this;
+        }
+        // eslint-disable-next-line
+        // @ts-ignore FIXME?
+        this._group.add(this);
+        this._repeat = this._initialRepeat;
+        if (this._reversed) {
+            // If we were reversed (f.e. using the yoyo feature) then we need to
+            // flip the tween direction back to forward.
+            this._reversed = false;
+            for (var property in this._valuesStartRepeat) {
+                this._swapEndStartRepeatValues(property);
+                this._valuesStart[property] = this._valuesStartRepeat[property];
+            }
+        }
+        this._isPlaying = true;
+        this._isPaused = false;
+        this._onStartCallbackFired = false;
+        this._isChainStopped = false;
+        this._startTime =
+            time !== undefined ? (typeof time === 'string' ? TWEEN.now() + parseFloat(time) : time) : TWEEN.now();
+        this._startTime += this._delayTime;
+        this._setupProperties(this._object, this._valuesStart, this._valuesEnd, this._valuesStartRepeat);
+        return this;
+    };
+    Tween.prototype._setupProperties = function (_object, _valuesStart, _valuesEnd, _valuesStartRepeat) {
+        for (var property in _valuesEnd) {
+            var startValue = _object[property];
+            var startValueIsArray = Array.isArray(startValue);
+            var propType = startValueIsArray ? 'array' : typeof startValue;
+            var isInterpolationList = !startValueIsArray && Array.isArray(_valuesEnd[property]);
+            // If `to()` specifies a property that doesn't exist in the source object,
+            // we should not set that property in the object
+            if (propType === 'undefined' || propType === 'function') {
+                continue;
+            }
+            // Check if an Array was provided as property value
+            if (isInterpolationList) {
+                var endValues = _valuesEnd[property];
+                if (endValues.length === 0) {
+                    continue;
+                }
+                // handle an array of relative values
+                endValues = endValues.map(this._handleRelativeValue.bind(this, startValue));
+                // Create a local copy of the Array with the start value at the front
+                _valuesEnd[property] = [startValue].concat(endValues);
+            }
+            // handle the deepness of the values
+            if ((propType === 'object' || startValueIsArray) && startValue && !isInterpolationList) {
+                _valuesStart[property] = startValueIsArray ? [] : {};
+                // eslint-disable-next-line
+                for (var prop in startValue) {
+                    // eslint-disable-next-line
+                    // @ts-ignore FIXME?
+                    _valuesStart[property][prop] = startValue[prop];
+                }
+                _valuesStartRepeat[property] = startValueIsArray ? [] : {}; // TODO? repeat nested values? And yoyo? And array values?
+                // eslint-disable-next-line
+                // @ts-ignore FIXME?
+                this._setupProperties(startValue, _valuesStart[property], _valuesEnd[property], _valuesStartRepeat[property]);
+            }
+            else {
+                // Save the starting value, but only once.
+                if (typeof _valuesStart[property] === 'undefined') {
+                    _valuesStart[property] = startValue;
+                }
+                if (!startValueIsArray) {
+                    // eslint-disable-next-line
+                    // @ts-ignore FIXME?
+                    _valuesStart[property] *= 1.0; // Ensures we're using numbers, not strings
+                }
+                if (isInterpolationList) {
+                    // eslint-disable-next-line
+                    // @ts-ignore FIXME?
+                    _valuesStartRepeat[property] = _valuesEnd[property].slice().reverse();
+                }
+                else {
+                    _valuesStartRepeat[property] = _valuesStart[property] || 0;
+                }
+            }
+        }
+    };
+    Tween.prototype.stop = function () {
+        if (!this._isChainStopped) {
+            this._isChainStopped = true;
+            this.stopChainedTweens();
+        }
+        if (!this._isPlaying) {
+            return this;
+        }
+        // eslint-disable-next-line
+        // @ts-ignore FIXME?
+        this._group.remove(this);
+        this._isPlaying = false;
+        this._isPaused = false;
+        if (this._onStopCallback) {
+            this._onStopCallback(this._object);
+        }
+        return this;
+    };
+    Tween.prototype.end = function () {
+        this.update(Infinity);
+        return this;
+    };
+    Tween.prototype.pause = function (time) {
+        if (this._isPaused || !this._isPlaying) {
+            return this;
+        }
+        this._isPaused = true;
+        this._pauseStart = time === undefined ? TWEEN.now() : time;
+        // eslint-disable-next-line
+        // @ts-ignore FIXME?
+        this._group.remove(this);
+        return this;
+    };
+    Tween.prototype.resume = function (time) {
+        if (!this._isPaused || !this._isPlaying) {
+            return this;
+        }
+        this._isPaused = false;
+        this._startTime += (time === undefined ? TWEEN.now() : time) - this._pauseStart;
+        this._pauseStart = 0;
+        // eslint-disable-next-line
+        // @ts-ignore FIXME?
+        this._group.add(this);
+        return this;
+    };
+    Tween.prototype.stopChainedTweens = function () {
+        for (var i = 0, numChainedTweens = this._chainedTweens.length; i < numChainedTweens; i++) {
+            this._chainedTweens[i].stop();
+        }
+        return this;
+    };
+    Tween.prototype.group = function (group) {
+        this._group = group;
+        return this;
+    };
+    Tween.prototype.delay = function (amount) {
+        this._delayTime = amount;
+        return this;
+    };
+    Tween.prototype.repeat = function (times) {
+        this._initialRepeat = times;
+        this._repeat = times;
+        return this;
+    };
+    Tween.prototype.repeatDelay = function (amount) {
+        this._repeatDelayTime = amount;
+        return this;
+    };
+    Tween.prototype.yoyo = function (yoyo) {
+        this._yoyo = yoyo;
+        return this;
+    };
+    Tween.prototype.easing = function (easingFunction) {
+        this._easingFunction = easingFunction;
+        return this;
+    };
+    Tween.prototype.interpolation = function (interpolationFunction) {
+        this._interpolationFunction = interpolationFunction;
+        return this;
+    };
+    Tween.prototype.chain = function () {
+        var tweens = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            tweens[_i] = arguments[_i];
+        }
+        this._chainedTweens = tweens;
+        return this;
+    };
+    Tween.prototype.onStart = function (callback) {
+        this._onStartCallback = callback;
+        return this;
+    };
+    Tween.prototype.onUpdate = function (callback) {
+        this._onUpdateCallback = callback;
+        return this;
+    };
+    Tween.prototype.onRepeat = function (callback) {
+        this._onRepeatCallback = callback;
+        return this;
+    };
+    Tween.prototype.onComplete = function (callback) {
+        this._onCompleteCallback = callback;
+        return this;
+    };
+    Tween.prototype.onStop = function (callback) {
+        this._onStopCallback = callback;
+        return this;
+    };
+    Tween.prototype.update = function (time) {
+        var property;
+        var elapsed;
+        var endTime = this._startTime + this._duration;
+        if (time > endTime && !this._isPlaying) {
+            return false;
+        }
+        // If the tween was already finished,
+        if (!this.isPlaying) {
+            this.start(time);
+        }
+        if (time < this._startTime) {
+            return true;
+        }
+        if (this._onStartCallbackFired === false) {
+            if (this._onStartCallback) {
+                this._onStartCallback(this._object);
+            }
+            this._onStartCallbackFired = true;
+        }
+        elapsed = (time - this._startTime) / this._duration;
+        elapsed = this._duration === 0 || elapsed > 1 ? 1 : elapsed;
+        var value = this._easingFunction(elapsed);
+        // properties transformations
+        this._updateProperties(this._object, this._valuesStart, this._valuesEnd, value);
+        if (this._onUpdateCallback) {
+            this._onUpdateCallback(this._object, elapsed);
+        }
+        if (elapsed === 1) {
+            if (this._repeat > 0) {
+                if (isFinite(this._repeat)) {
+                    this._repeat--;
+                }
+                // Reassign starting values, restart by making startTime = now
+                for (property in this._valuesStartRepeat) {
+                    if (!this._yoyo && typeof this._valuesEnd[property] === 'string') {
+                        this._valuesStartRepeat[property] =
+                            // eslint-disable-next-line
+                            // @ts-ignore FIXME?
+                            this._valuesStartRepeat[property] + parseFloat(this._valuesEnd[property]);
+                    }
+                    if (this._yoyo) {
+                        this._swapEndStartRepeatValues(property);
+                    }
+                    this._valuesStart[property] = this._valuesStartRepeat[property];
+                }
+                if (this._yoyo) {
+                    this._reversed = !this._reversed;
+                }
+                if (this._repeatDelayTime !== undefined) {
+                    this._startTime = time + this._repeatDelayTime;
+                }
+                else {
+                    this._startTime = time + this._delayTime;
+                }
+                if (this._onRepeatCallback) {
+                    this._onRepeatCallback(this._object);
+                }
+                return true;
+            }
+            else {
+                if (this._onCompleteCallback) {
+                    this._onCompleteCallback(this._object);
+                }
+                for (var i = 0, numChainedTweens = this._chainedTweens.length; i < numChainedTweens; i++) {
+                    // Make the chained tweens start exactly at the time they should,
+                    // even if the `update()` method was called way past the duration of the tween
+                    this._chainedTweens[i].start(this._startTime + this._duration);
+                }
+                this._isPlaying = false;
+                return false;
+            }
+        }
+        return true;
+    };
+    Tween.prototype._updateProperties = function (_object, _valuesStart, _valuesEnd, value) {
+        for (var property in _valuesEnd) {
+            // Don't update properties that do not exist in the source object
+            if (_valuesStart[property] === undefined) {
+                continue;
+            }
+            var start = _valuesStart[property] || 0;
+            var end = _valuesEnd[property];
+            var startIsArray = Array.isArray(_object[property]);
+            var endIsArray = Array.isArray(end);
+            var isInterpolationList = !startIsArray && endIsArray;
+            if (isInterpolationList) {
+                _object[property] = this._interpolationFunction(end, value);
+            }
+            else if (typeof end === 'object' && end) {
+                // eslint-disable-next-line
+                // @ts-ignore FIXME?
+                this._updateProperties(_object[property], start, end, value);
+            }
+            else {
+                // Parses relative end values with start as base (e.g.: +10, -3)
+                end = this._handleRelativeValue(start, end);
+                // Protect against non numeric properties.
+                if (typeof end === 'number') {
+                    // eslint-disable-next-line
+                    // @ts-ignore FIXME?
+                    _object[property] = start + (end - start) * value;
+                }
+            }
+        }
+    };
+    Tween.prototype._handleRelativeValue = function (start, end) {
+        if (typeof end !== 'string') {
+            return end;
+        }
+        if (end.charAt(0) === '+' || end.charAt(0) === '-') {
+            return start + parseFloat(end);
+        }
+        else {
+            return parseFloat(end);
+        }
+    };
+    Tween.prototype._swapEndStartRepeatValues = function (property) {
+        var tmp = this._valuesStartRepeat[property];
+        if (typeof this._valuesEnd[property] === 'string') {
+            // eslint-disable-next-line
+            // @ts-ignore FIXME?
+            this._valuesStartRepeat[property] = this._valuesStartRepeat[property] + parseFloat(this._valuesEnd[property]);
+        }
+        else {
+            this._valuesStartRepeat[property] = this._valuesEnd[property];
+        }
+        this._valuesEnd[property] = tmp;
+    };
+    return Tween;
+}());
+
+var VERSION = '18.6.0';
+
+/**
+ * Tween.js - Licensed under the MIT license
+ * https://github.com/tweenjs/tween.js
+ * ----------------------------------------------
+ *
+ * See https://github.com/tweenjs/tween.js/graphs/contributors for the full list of contributors.
+ * Thank you all, you're awesome!
+ */
+var __extends = (undefined && undefined.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+/**
+ * Controlling groups of tweens
+ *
+ * Using the TWEEN singleton to manage your tweens can cause issues in large apps with many components.
+ * In these cases, you may want to create your own smaller groups of tween
+ */
+var Main = /** @class */ (function (_super) {
+    __extends(Main, _super);
+    function Main() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.version = VERSION;
+        _this.now = NOW$1;
+        _this.Group = Group;
+        _this.Easing = Easing;
+        _this.Interpolation = Interpolation;
+        _this.nextId = Sequence.nextId;
+        _this.Tween = Tween;
+        return _this;
+    }
+    return Main;
+}(Group));
+var TWEEN = new Main();
+
+/* harmony default export */ __webpack_exports__["default"] = (TWEEN);
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../process/browser.js */ "./node_modules/process/browser.js")))
+
+/***/ }),
+
 /***/ "./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js":
 /*!*********************************************************************!*\
   !*** ./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js ***!
@@ -51544,6 +52402,7 @@ const App = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["defineCompone
     }
   },
   render(ctx) {
+    console.log(ctx.currentPage)
     return Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])('Container', [
       Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])(ctx.currentPage, {handleNextPage: ctx.handleNextPage})
     ])
@@ -51588,19 +52447,128 @@ function getGame() {
 /*!*********************************!*\
   !*** ./src/component/Bullet.js ***!
   \*********************************/
-/*! exports provided: default */
+/*! exports provided: SelfBulletInfo, EnemyBulletInfo, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SelfBulletInfo", function() { return SelfBulletInfo; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EnemyBulletInfo", function() { return EnemyBulletInfo; });
 /* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
-/* harmony import */ var _Game__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Game */ "./src/Game.js");
+/* harmony import */ var _assets_bullet_png__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../assets/bullet.png */ "./assets/bullet.png");
 
 
-// 飞机图片 import
+
+
+
+const SelfBulletInfo = {
+  width: 61,
+  height: 99,
+  rotation: 0,
+  dir: -1,
+};
+const EnemyBulletInfo = {
+  width: 61,
+  height: 99,
+  rotation: 0,
+  dir: 1,
+};
+
+//炮弹
 /* harmony default export */ __webpack_exports__["default"] = (Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["defineComponent"])({
-  
+  props: ["x", "y", "id", "rotation", "dir"],
+  setup(props) {
+    const x = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["ref"])(props.x);
+    const y = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["ref"])(props.y);
+
+    Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["watch"])(props, (newProps) => {
+      x.value = newProps.x;
+      y.value = newProps.y;
+    });
+
+    return {
+      x,
+      y,
+      rotation: props.rotation,
+      dir: props.dir
+    };
+  },
+  render(ctx) {
+    return Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])("Sprite", {
+      x: ctx.x,
+      y: ctx.y,
+      rotation: ctx.rotation,
+      texture: ctx.dir === 1 ? _assets_bullet_png__WEBPACK_IMPORTED_MODULE_1__["default"] : _assets_bullet_png__WEBPACK_IMPORTED_MODULE_1__["default"]
+    });
+  },
 }));
+
+/***/ }),
+
+/***/ "./src/component/EnemyPlane.js":
+/*!*************************************!*\
+  !*** ./src/component/EnemyPlane.js ***!
+  \*************************************/
+/*! exports provided: EnemyPlaneInfo, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EnemyPlaneInfo", function() { return EnemyPlaneInfo; });
+/* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
+/* harmony import */ var _assets_enemy_png__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../assets/enemy.png */ "./assets/enemy.png");
+
+
+
+const EnemyPlaneInfo = {
+  width: 308,
+  height: 207,
+  life: 3,
+};
+// 敌方飞机
+/* harmony default export */ __webpack_exports__["default"] = (Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["defineComponent"])({
+  props: ["x", "y"],
+  setup(props, ctx) {
+    const x = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["ref"])(props.x);
+    const y = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["ref"])(props.y);
+
+    Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["watch"])(props, (newValue) => {
+      x.value = newValue.x;
+      y.value = newValue.y;
+    });
+
+    useAttack(ctx, x, y);
+    return {
+      x,
+      y,
+    };
+  },
+  render(ctx) {
+    return Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])("Sprite", {
+      x: ctx.x,
+      y: ctx.y,
+      texture: _assets_enemy_png__WEBPACK_IMPORTED_MODULE_1__["default"],
+    });
+  },
+}));
+
+const useAttack = (ctx, x, y) => {
+  // 发射子弹
+  const attackInterval = 2000;
+  let intervalId;
+  Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["onMounted"])(() => {
+    intervalId = setInterval(() => {
+      ctx.emit("attack", {
+        x: x.value + 105,
+        y: y.value + 200,
+      });
+    }, attackInterval);
+  });
+
+  Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["onUnmounted"])(() => {
+    clearInterval(intervalId);
+  });
+};
 
 /***/ }),
 
@@ -51616,43 +52584,63 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
 /* harmony import */ var _Game__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Game */ "./src/Game.js");
 /* harmony import */ var _assets_map_jpg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../assets/map.jpg */ "./assets/map.jpg");
+/* harmony import */ var _utils_constate__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/constate */ "./src/utils/constate.js");
+
 
 
 // 地图图片 import
 
 
+
+// 地图
 /* harmony default export */ __webpack_exports__["default"] = (Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["defineComponent"])({
-  setup() {
-    const mapHeight = 1080;
-    // 创建一个响应式对象 ref
-    const mapY1 = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["ref"])(0)
-    const mapY2 = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["ref"])(-mapHeight)
-    // 让地图动起来
-    // y++
-    // 循环
-    
-    const speed = 5;
-    Object(_Game__WEBPACK_IMPORTED_MODULE_1__["getGame"])().ticker.add(()=> {
-      mapY1.value += speed;
-      mapY2.value += speed;
-      if (mapY1.value >= mapHeight) {
-        mapY1.value = 0
+  setup(props, ctx) {
+    const mapHeight = _utils_constate__WEBPACK_IMPORTED_MODULE_3__["GAME_CONFIG"].height;
+    let y1 = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["ref"])(0);
+    let y2 = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["ref"])(-mapHeight);
+
+    const speed = 1;
+
+    const handleTicker = () => {
+      y1.value += speed;
+      y2.value += speed;
+
+      if (y1.value >= mapHeight) {
+        y1.value = -mapHeight;
       }
-      if (mapY2.value >= mapHeight) {
-        mapY2.value = -mapHeight
+
+      if (y2.value >= mapHeight) {
+        y2.value = -mapHeight;
       }
-    })
-    return  {
-      mapY1,
-      mapY2
-    }
+    };
+
+    Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["onMounted"])(() => {
+      Object(_Game__WEBPACK_IMPORTED_MODULE_1__["getGame"])().ticker.add(handleTicker);
+    });
+
+    Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["onUnmounted"])(() => {
+      Object(_Game__WEBPACK_IMPORTED_MODULE_1__["getGame"])().ticker.remove(handleTicker);
+    });
+
+    return {
+      y1,
+      y2,
+    };
   },
   render(ctx) {
     return Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])("Container", [
-      Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])("Sprite", {texture: _assets_map_jpg__WEBPACK_IMPORTED_MODULE_2__["default"], y: ctx.mapY1.value}),
-      Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])("Sprite", {texture: _assets_map_jpg__WEBPACK_IMPORTED_MODULE_2__["default"], y: ctx.mapY2.value})
-    ])
-  }
+      Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])("Sprite", {
+        y: ctx.y1,
+        texture: _assets_map_jpg__WEBPACK_IMPORTED_MODULE_2__["default"],
+        key: "1",
+      }),
+      Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])("Sprite", {
+        y: ctx.y2,
+        texture: _assets_map_jpg__WEBPACK_IMPORTED_MODULE_2__["default"],
+        key: "2",
+      }),
+    ]);
+  },
 }));
 
 /***/ }),
@@ -51661,50 +52649,293 @@ __webpack_require__.r(__webpack_exports__);
 /*!********************************!*\
   !*** ./src/component/Plane.js ***!
   \********************************/
-/*! exports provided: default */
+/*! exports provided: PlaneInfo, default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PlaneInfo", function() { return PlaneInfo; });
 /* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
 /* harmony import */ var _Game__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../Game */ "./src/Game.js");
+/* harmony import */ var _methods__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../methods */ "./src/methods/index.js");
+/* harmony import */ var _assets_plane_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../assets/plane.png */ "./assets/plane.png");
+
 
 
 // 飞机图片 import
+
+
+const PlaneInfo = {
+  width:258,
+  height:364
+}
+
+// 飞机
 /* harmony default export */ __webpack_exports__["default"] = (Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["defineComponent"])({
-  props: ["x", "y"],
-  setup(props) {
-    const x = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["ref"])(props.x)
-    const y = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["ref"])(props.y)
-    const {x: x1, y: y1} = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["toRefs"])(props);
-    // watch(props, (value)=> {
-    //   x.value = value.x
-    //   y.value = value.y
-    // })
-    const handleAttack = (e)=> {
-      if (e.code === 'Space') {
-        ctx.emit('', ()=> {
-          
-        })
-      }
-    }
-    Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["onMounted"])(()=> {
-      window.addEventListener('keydown', handleAttack)
-    })
-    Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["onUnmounted"])(()=> {
-      window.removeEventListener('keydown', handleAttack)
-    })
+  props: ["x", "y", "speed"],
+  setup(props, ctx) {
+    const x = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["ref"])(props.x);
+    const y = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["ref"])(props.y);
+    Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["watch"])(props, (newProps) => {
+      x.value = newProps.x;
+      y.value = newProps.y;
+    });
+
+    useAttackHandler(ctx, x, y);
+
     return {
       x,
-      y
-    }
+      y,
+    };
   },
   render(ctx) {
-    return Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])("Container", [
-      Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])("Sprite", {texture: '', x: ctx.x, y: ctx.y})
-    ])
-  }
+    return Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])("Sprite", {
+      x: ctx.x,
+      y: ctx.y,
+      texture: _assets_plane_png__WEBPACK_IMPORTED_MODULE_3__["default"],
+    });
+  },
 }));
+
+function useAttackHandler(ctx, x, y) {
+  let isAttack = false;
+  // 攻击间隔时间
+  const ATTACK_INTERVAL = 10;
+
+  let startTime = 0;
+
+  const handleTicker = () => {
+    if (isAttack) {
+      startTime++;
+      if (startTime > ATTACK_INTERVAL) {
+        emitAttack();
+        startTime = 0;
+      }
+    }
+  };
+
+  Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["onMounted"])(() => {
+    Object(_Game__WEBPACK_IMPORTED_MODULE_1__["getGame"])().ticker.add(handleTicker);
+  });
+
+  Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["onUnmounted"])(() => {
+    Object(_Game__WEBPACK_IMPORTED_MODULE_1__["getGame"])().ticker.remove(handleTicker);
+  });
+
+  const emitAttack = () => {
+    ctx.emit("attack", {
+      x: x.value + 110,
+      y: y.value + 0,
+    });
+  };
+
+  const startAttack = () => {
+    isAttack = true;
+    startTime = 100;
+  };
+
+  const stopAttack = () => {
+    isAttack = false;
+  };
+
+  Object(_methods__WEBPACK_IMPORTED_MODULE_2__["useKeyboard"])({
+    Space: {
+      keydown: startAttack,
+      keyup: stopAttack,
+    },
+  });
+}
+
+/***/ }),
+
+/***/ "./src/methods/index.js":
+/*!******************************!*\
+  !*** ./src/methods/index.js ***!
+  \******************************/
+/*! exports provided: useKeyboard, useKeyboardMove */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _useKeyboard__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./useKeyboard */ "./src/methods/useKeyboard.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "useKeyboard", function() { return _useKeyboard__WEBPACK_IMPORTED_MODULE_0__["useKeyboard"]; });
+
+/* harmony import */ var _useKeyboardMove__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./useKeyboardMove */ "./src/methods/useKeyboardMove.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "useKeyboardMove", function() { return _useKeyboardMove__WEBPACK_IMPORTED_MODULE_1__["useKeyboardMove"]; });
+
+
+
+
+
+
+/***/ }),
+
+/***/ "./src/methods/useKeyboard.js":
+/*!************************************!*\
+  !*** ./src/methods/useKeyboard.js ***!
+  \************************************/
+/*! exports provided: useKeyboard */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "useKeyboard", function() { return useKeyboard; });
+/* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
+
+
+/**
+ * 注册键盘事件
+ */
+const useKeyboard = (map) => {
+  const handleKeydown = (e) => {
+    const callbackObj = map[e.code];
+    if (callbackObj && callbackObj.keydown) callbackObj.keydown(e);
+  };
+
+  const handleKeyup = (e) => {
+    const callbackObj = map[e.code];
+    if (callbackObj && callbackObj.keyup) callbackObj.keyup(e);
+  };
+
+  Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["onMounted"])(() => {
+    window.addEventListener("keydown", handleKeydown);
+    window.addEventListener("keyup", handleKeyup);
+  });
+
+  Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["onUnmounted"])(() => {
+    window.removeEventListener("keydown", handleKeydown);
+    window.removeEventListener("keyup", handleKeyup);
+  });
+};
+
+/***/ }),
+
+/***/ "./src/methods/useKeyboardMove.js":
+/*!****************************************!*\
+  !*** ./src/methods/useKeyboardMove.js ***!
+  \****************************************/
+/*! exports provided: useKeyboardMove */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "useKeyboardMove", function() { return useKeyboardMove; });
+/* harmony import */ var _Game__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Game */ "./src/Game.js");
+/* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
+
+
+
+/**
+ * 键盘移动
+ * @param x 初始化 x 坐标值
+ * @param y 初始化 y 坐标值
+ * @param speed 移动速度
+ */
+
+const commandType = {
+  upAndDown: "upAndDown", //上下
+  leftAndRight: "leftAndRight", // 左右
+};
+// 键盘按键
+const useKeyboardMove = ({ x, y, speed }) => {
+  const moveX = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__["ref"])(x);
+  const moveY = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__["ref"])(y);
+
+  const moveCommands = [];
+
+  const downCommand = {
+    type: commandType.upAndDown,
+    dir: 1,
+    id: 1,
+  };
+
+  const upCommand = {
+    type: commandType.upAndDown,
+    dir: -1,
+    id: 2,
+  };
+
+  const leftCommand = {
+    type: commandType.leftAndRight,
+    dir: -1,
+    id: 3,
+  };
+
+  const rightCommand = {
+    type: commandType.leftAndRight,
+    dir: 1,
+    id: 4,
+  };
+
+  const findUpAndDownCommand = () =>
+    moveCommands.find((command) => command.type === commandType.upAndDown);
+
+  const findLeftAndRightCommand = () =>
+    moveCommands.find((command) => command.type === commandType.leftAndRight);
+
+  const isExistCommand = (command) => {
+    const id = command.id;
+    const result = moveCommands.find((c) => c.id === id);
+    if (result) return true;
+    return false;
+  };
+
+  const removeCommand = (command) => {
+    const id = command.id;
+    const index = moveCommands.findIndex((c) => c.id === id);
+    moveCommands.splice(index, 1);
+  };
+
+  const handleTicker = () => {
+    const upAndDownCommand = findUpAndDownCommand();
+    if (upAndDownCommand) {
+      moveY.value += speed * upAndDownCommand.dir;
+    }
+
+    const leftAndRightCommand = findLeftAndRightCommand();
+    if (leftAndRightCommand) {
+      moveX.value += speed * leftAndRightCommand.dir;
+    }
+  };
+
+  const commandMap = {
+    ArrowLeft: leftCommand,
+    ArrowRight: rightCommand,
+    ArrowUp: upCommand,
+    ArrowDown: downCommand,
+  };
+
+  const handleKeydown = (e) => {
+    const command = commandMap[e.code];
+    if (command && !isExistCommand(command)) {
+      moveCommands.unshift(command);
+    }
+  };
+
+  const handleKeyup = (e) => {
+    const command = commandMap[e.code];
+    if (command) {
+      removeCommand(command);
+    }
+  };
+
+  Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__["onMounted"])(() => {
+    Object(_Game__WEBPACK_IMPORTED_MODULE_0__["getGame"])().ticker.add(handleTicker);
+    window.addEventListener("keydown", handleKeydown);
+    window.addEventListener("keyup", handleKeyup);
+  });
+
+  Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_1__["onUnmounted"])(() => {
+    Object(_Game__WEBPACK_IMPORTED_MODULE_0__["getGame"])().ticker.remove(handleTicker);
+    window.removeEventListener("keydown", handleKeydown);
+    window.removeEventListener("keyup", handleKeyup);
+  });
+
+  return {
+    x: moveX,
+    y: moveY
+  };
+};
 
 /***/ }),
 
@@ -51801,7 +53032,7 @@ __webpack_require__.r(__webpack_exports__);
   props: ["handleNextPage"],
   steup(props, ctx) {
     const handleStartGame = ()=> {
-      props.handleNextPage('')
+      props.handleNextPage(_page__WEBPACK_IMPORTED_MODULE_1__["PAGE"].play)
     }
     return {
       handleStartGame
@@ -51838,104 +53069,324 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
-/* harmony import */ var _component_Map__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../component/Map */ "./src/component/Map.js");
-/* harmony import */ var _component_Plane__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../component/Plane */ "./src/component/Plane.js");
-/* harmony import */ var _component_Bullet__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../component/Bullet */ "./src/component/Bullet.js");
-/* harmony import */ var _Game__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../Game */ "./src/Game.js");
+/* harmony import */ var _page__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../page */ "./src/page/index.js");
+/* harmony import */ var _Game__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Game */ "./src/Game.js");
+/* harmony import */ var _component_Map__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../component/Map */ "./src/component/Map.js");
+/* harmony import */ var _tweenjs_tween_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @tweenjs/tween.js */ "./node_modules/@tweenjs/tween.js/dist/tween.esm.js");
+/* harmony import */ var _component_Plane__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../component/Plane */ "./src/component/Plane.js");
+/* harmony import */ var _methods__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../methods */ "./src/methods/index.js");
+/* harmony import */ var _utils_constate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../utils/constate */ "./src/utils/constate.js");
+/* harmony import */ var _utils_utils__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../utils/utils */ "./src/utils/utils.js");
+/* harmony import */ var _utils_moveBullets__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../utils/moveBullets */ "./src/utils/moveBullets.js");
+/* harmony import */ var _utils_moveEnemyPlane__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../utils/moveEnemyPlane */ "./src/utils/moveEnemyPlane.js");
+/* harmony import */ var _component_EnemyPlane__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../component/EnemyPlane */ "./src/component/EnemyPlane.js");
+/* harmony import */ var _component_Bullet__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../component/Bullet */ "./src/component/Bullet.js");
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+let hashCode = 0;
+const createHashCode = () => {
+  return hashCode++;
+};
+
+// 我方战机
+const useSelfPlane = ({ x, y, speed }) => {
+  const selfPlane = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["reactive"])({
+    x,
+    y,
+    speed,
+    width: _component_Plane__WEBPACK_IMPORTED_MODULE_5__["PlaneInfo"].width,
+    height: _component_Plane__WEBPACK_IMPORTED_MODULE_5__["PlaneInfo"].height,
+  });
+
+  const { x: selfPlaneX, y: selfPlaneY } = Object(_methods__WEBPACK_IMPORTED_MODULE_6__["useKeyboardMove"])({
+    x: selfPlane.x,
+    y: selfPlane.y,
+    speed: selfPlane.speed,
+  });
+
+  // 缓动出场
+  var tween = new _tweenjs_tween_js__WEBPACK_IMPORTED_MODULE_4__["default"].Tween({
+    x,
+    y,
+  })
+    .to({ y: y - 250 }, 500)
+    .start();
+  tween.onUpdate((obj) => {
+    selfPlane.x = obj.x;
+    selfPlane.y = obj.y;
+  });
+
+  const handleTicker = () => {
+    _tweenjs_tween_js__WEBPACK_IMPORTED_MODULE_4__["default"].update();
+  };
+
+  Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["onUnmounted"])(() => {
+    Object(_Game__WEBPACK_IMPORTED_MODULE_2__["getGame"])().ticker.remove(handleTicker);
+  });
+
+  Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["onMounted"])(() => {
+    Object(_Game__WEBPACK_IMPORTED_MODULE_2__["getGame"])().ticker.add(handleTicker);
+  });
+
+  selfPlane.x = selfPlaneX;
+  selfPlane.y = selfPlaneY;
+
+  return selfPlane;
+};
+
+// 我方子弹
+const useSelfBullet = () => {
+  // 子弹的数据
+  const selfBullets = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["reactive"])([]);
+
+  // 创建子弹
+  const createSelfBullet = (x, y) => {
+    const id = createHashCode();
+    const width = _component_Bullet__WEBPACK_IMPORTED_MODULE_12__["SelfBulletInfo"].width;
+    const height = _component_Bullet__WEBPACK_IMPORTED_MODULE_12__["SelfBulletInfo"].height;
+    const rotation = _component_Bullet__WEBPACK_IMPORTED_MODULE_12__["SelfBulletInfo"].rotation;
+    const dir = _component_Bullet__WEBPACK_IMPORTED_MODULE_12__["SelfBulletInfo"].dir;
+    selfBullets.push({ x, y, id, width, height, rotation, dir });
+  };
+
+  // 销毁子弹
+
+  const destroySelfBullet = (id) => {
+    const index = selfBullets.findIndex((info) => info.id == id);
+    if (index !== -1) {
+      selfBullets.splice(index, 1);
+    }
+  };
+
+  return {
+    selfBullets,
+    createSelfBullet,
+    destroySelfBullet,
+  };
+};
+
+// 敌机
+const useEnemyPlanes = () => {
+  //生产敌机
+  const createEnemyPlaneData = (x) => {
+    return {
+      x,
+      y: -200,
+      width: _component_EnemyPlane__WEBPACK_IMPORTED_MODULE_11__["EnemyPlaneInfo"].width,
+      height: _component_EnemyPlane__WEBPACK_IMPORTED_MODULE_11__["EnemyPlaneInfo"].height,
+      life: _component_EnemyPlane__WEBPACK_IMPORTED_MODULE_11__["EnemyPlaneInfo"].life,
+    };
+  };
+
+  const enemyPlanes = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["reactive"])([]);
+
+  setInterval(() => {
+    const x = Math.floor((1 + _utils_constate__WEBPACK_IMPORTED_MODULE_7__["GAME_CONFIG"].width) * Math.random());
+    enemyPlanes.push(createEnemyPlaneData(x));
+  }, 600);
+
+  return enemyPlanes;
+};
+
+const useEnemyPlaneBullets = () => {
+  // 创建敌军子弹
+  const enemyPlaneBullets = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["reactive"])([]);
+
+  const createEnemyPlaneBullet = (x, y) => {
+    const id = createHashCode();
+    const width = _component_Bullet__WEBPACK_IMPORTED_MODULE_12__["EnemyBulletInfo"].width;
+    const height = _component_Bullet__WEBPACK_IMPORTED_MODULE_12__["EnemyBulletInfo"].height;
+    const rotation = _component_Bullet__WEBPACK_IMPORTED_MODULE_12__["EnemyBulletInfo"].rotation;
+    const dir = _component_Bullet__WEBPACK_IMPORTED_MODULE_12__["EnemyBulletInfo"].dir;
+    enemyPlaneBullets.push({ x, y, id, width, height, rotation, dir });
+  };
+
+  return {
+    enemyPlaneBullets,
+    createEnemyPlaneBullet,
+  };
+};
+
+// 战斗逻辑
+const useFighting = ({
+  selfPlane,
+  selfBullets,
+  enemyPlanes,
+  enemyPlaneBullets,
+  gameOverCallback,
+}) => {
+  const handleTicker = () => {
+    Object(_utils_moveBullets__WEBPACK_IMPORTED_MODULE_9__["moveBullets"])(selfBullets);
+    Object(_utils_moveBullets__WEBPACK_IMPORTED_MODULE_9__["moveBullets"])(enemyPlaneBullets);
+    Object(_utils_moveEnemyPlane__WEBPACK_IMPORTED_MODULE_10__["moveEnemyPlane"])(enemyPlanes);
+
+    // 先遍历自己所有的子弹
+    selfBullets.forEach((bullet, selfIndex) => {
+      // 检测我方子弹是否碰到了敌机
+      enemyPlanes.forEach((enemyPlane, enemyPlaneIndex) => {
+        const isIntersect = Object(_utils_utils__WEBPACK_IMPORTED_MODULE_8__["hitTestRectangle"])(bullet, enemyPlane);
+        if (isIntersect) {
+          selfBullets.splice(selfIndex, 1);
+
+          // 敌机需要减血
+          enemyPlane.life--;
+          if (enemyPlane.life <= 0) {
+            // todo
+            // 可以让实例发消息过来在销毁
+            // 因为需要在销毁之前播放销毁动画
+            enemyPlanes.splice(enemyPlaneIndex, 1);
+          }
+        }
+      });
+
+      // 检测是否碰到了敌方子弹
+      enemyPlaneBullets.forEach((enemyBullet, enemyBulletIndex) => {
+        const isIntersect = Object(_utils_utils__WEBPACK_IMPORTED_MODULE_8__["hitTestRectangle"])(bullet, enemyBullet);
+        if (isIntersect) {
+          selfBullets.splice(selfIndex, 1);
+          enemyPlaneBullets.splice(enemyBulletIndex, 1);
+        }
+      });
+    });
+
+    const hitSelfHandle = (enemyObject) => {
+      const isIntersect = Object(_utils_utils__WEBPACK_IMPORTED_MODULE_8__["hitTestRectangle"])(selfPlane, enemyObject);
+      if (isIntersect) {
+        // 碰到我方飞机
+        // 直接 game over
+        // 跳转到结束页面
+        gameOverCallback && gameOverCallback();
+      }
+    };
+
+    // 遍历敌军的子弹
+    enemyPlaneBullets.forEach((enemyBullet, enemyBulletIndex) => {
+      hitSelfHandle(enemyBullet);
+    });
+
+    // 遍历敌军
+    // 我方和敌军碰撞也会结束游戏
+    enemyPlanes.forEach((enemyPlane) => {
+      hitSelfHandle(enemyPlane);
+    });
+  };
+
+  Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["onUnmounted"])(() => {
+    Object(_Game__WEBPACK_IMPORTED_MODULE_2__["getGame"])().ticker.remove(handleTicker);
+  });
+
+  Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["onMounted"])(() => {
+    Object(_Game__WEBPACK_IMPORTED_MODULE_2__["getGame"])().ticker.add(handleTicker);
+  });
+};
 
 /* harmony default export */ __webpack_exports__["default"] = (Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["defineComponent"])({
-  setup() {
-    // ref 处理值类型 响应式
-    // reactive 处理对象类型 响应式
-    const planeInfo = useCreatePlaneInfo()
-    const bullets = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["reactive"])([{
-      x: 10, 
-      y: 10
-    }])
-    const handleAttack = (info)=> {
-      const createBulletInfo = ()=> {
-        return {
-          ...info
-        }
-      }
-      bullets.push(createBulletInfo())
-    }
-    Object(_Game__WEBPACK_IMPORTED_MODULE_4__["getGame"])().ticker.add(()=>{
-      moveBullets()
-    })
-    
+  props: ["handleNextPage"],
+  setup(props) {
+    console.log('start game.')
+    const selfPlane = useSelfPlane({
+      x: _utils_constate__WEBPACK_IMPORTED_MODULE_7__["GAME_CONFIG"].width / 2 - 60,
+      y: _utils_constate__WEBPACK_IMPORTED_MODULE_7__["GAME_CONFIG"].height,
+      speed: 7,
+    });
+
+    const {
+      selfBullets,
+      createSelfBullet,
+      destroySelfBullet,
+    } = useSelfBullet();
+
+    const enemyPlanes = useEnemyPlanes();
+
+    const {
+      enemyPlaneBullets,
+      createEnemyPlaneBullet,
+    } = useEnemyPlaneBullets();
+
+    useFighting({
+      selfPlane,
+      selfBullets,
+      enemyPlanes,
+      enemyPlaneBullets,
+      gameOverCallback() {
+        props.onNextPage(_page__WEBPACK_IMPORTED_MODULE_1__["PAGE"].over);
+      },
+    });
+
     return {
-      bullets,
-      planeInfo,
-      handleAttack
-    }
+      selfPlane,
+      enemyPlanes,
+      selfBullets,
+      createSelfBullet,
+      destroySelfBullet,
+      enemyPlaneBullets,
+      createEnemyPlaneBullet,
+    };
   },
+
   render(ctx) {
+    const createBullet = (info, index) => {
+      return Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])(_component_Bullet__WEBPACK_IMPORTED_MODULE_12__["default"], {
+        x: info.x,
+        y: info.y,
+        id: info.id,
+        dir: info.dir,
+        width: info.width,
+        height: info.height,
+        key: `Bullet${info.id}`,
+        rotation: info.rotation,        
+        onDestroy({ id }) {
+          ctx.destroySelfBullet(id);
+        },
+      });
+    };
+
+    const createEnemyPlane = (info, index) => {
+      return Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])(_component_EnemyPlane__WEBPACK_IMPORTED_MODULE_11__["default"], {
+        key: "EnemyPlane" + index,
+        x: info.x,
+        y: info.y,
+        height: info.height,
+        width: info.width,
+        onAttack({ x, y }) {
+          ctx.createEnemyPlaneBullet(x, y);
+        },
+      });
+    };
+
+    const createSelfPlane = () => {
+      return Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])(_component_Plane__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        x: ctx.selfPlane.x,
+        y: ctx.selfPlane.y,
+        speed: ctx.selfPlane.speed,
+        onAttack({ x, y }) {
+          ctx.createSelfBullet(x, y);
+        },
+      });
+    };
+
     return Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])("Container", [
-      Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])(_component_Map__WEBPACK_IMPORTED_MODULE_1__["default"]),
-      Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])(_component_Plane__WEBPACK_IMPORTED_MODULE_2__["default"], {...ctx.planeInfo})
-    ])
-  }
+      Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])(_component_Map__WEBPACK_IMPORTED_MODULE_3__["default"]),
+      createSelfPlane(),
+      ...ctx.selfBullets.map(createBullet),
+      ...ctx.enemyPlaneBullets.map(createBullet),
+      ...ctx.enemyPlanes.map(createEnemyPlane),
+    ]);
+  },
 }));
-const moveBullets = (bullets)=> {
-  const speed = 5
-  bullets.forEach(bulletItem=> {
-    bulletItem.y += speed;
-  })
-}
-const useCreatePlaneInfo = ()=> {
-  const planeInfo = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["reactive"])({
-    x: 150,
-    y: 200
-  })
-
-  const {x, y} = useMovePlane(planeInfo.x, planeInfo.y)
-  planeInfo.x = x
-  planeInfo.y = y
-  return planeInfo
-}
-
-const handleKeyDown = (e)=> {
-  const speed = 15;
-  switch(e.code) {
-    case "ArrowUp":
-      planeInfo.y -= speed;
-      break;
-    case "ArrowDown":
-      planeInfo.y += speed;
-      break;
-    case "ArrowLeft":
-      planeInfo.x -= speed;
-      break;
-    case "ArrowRight":
-      planeInfo.x += speed;
-      break;
-  }
-}
-
-const useMovePlane = (initX,initY)=> {
-  const point = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["reactive"])({
-    x: initX,
-    y: initY
-  })
-  // 按键
-  // remove
-  // 生命周期
-  // onMounted,
-  // onUnmounted,
-  Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["onMounted"])(()=> {
-    window.addEventListener("keydown", handleKeyDown)
-  })
-  Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["onUnmounted"])(()=> {
-    window.removeEventListener("keydown", handleKeyDown)
-  })
-  return Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["toRefs"])(point)
-}
 
 /***/ }),
 
@@ -51949,9 +53400,15 @@ const useMovePlane = (initX,initY)=> {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
-/* harmony import */ var _page__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../page */ "./src/page/index.js");
-/* harmony import */ var _assets_start_page_jpg__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../assets/start_page.jpg */ "./assets/start_page.jpg");
-/* harmony import */ var _assets_startBtn_png__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../assets/startBtn.png */ "./assets/startBtn.png");
+/* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
+/* harmony import */ var _Game__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Game */ "./src/Game.js");
+/* harmony import */ var _page__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../page */ "./src/page/index.js");
+/* harmony import */ var _assets_start_page_jpg__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../assets/start_page.jpg */ "./assets/start_page.jpg");
+/* harmony import */ var _assets_startBtn_png__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../assets/startBtn.png */ "./assets/startBtn.png");
+/* harmony import */ var _assets_bgm_mp3__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../assets/bgm.mp3 */ "./assets/bgm.mp3");
+
+
+
 
 
 
@@ -51960,10 +53417,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = (Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["defineComponent"])({
   props: ["handleNextPage"],
   setup(props, ctx) {
+    // const starBg = PIXI.sound.Sound.from(bgm)
     const handleStartGame = ()=> {
-      console.log('handleStartGame')
-      props.handleNextPage(_page__WEBPACK_IMPORTED_MODULE_1__["PAGE"].play)
+      props.handleNextPage(_page__WEBPACK_IMPORTED_MODULE_3__["PAGE"].play)
     }
+    Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["onMounted"])(()=> {
+      // starBg.play()
+      // getGame().sound.Sound.from(bgm)
+    })
     return {
       handleStartGame
     }
@@ -51971,16 +53432,15 @@ __webpack_require__.r(__webpack_exports__);
   render(ctx) {
     return Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])("Container",
       [
-        Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])("Sprite", {texture: _assets_start_page_jpg__WEBPACK_IMPORTED_MODULE_2__["default"]}),
+        Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])("Sprite", {texture: _assets_start_page_jpg__WEBPACK_IMPORTED_MODULE_4__["default"]}),
         Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["h"])("Sprite", {
-          texture: _assets_startBtn_png__WEBPACK_IMPORTED_MODULE_3__["default"], 
+          texture: _assets_startBtn_png__WEBPACK_IMPORTED_MODULE_5__["default"], 
           x: 225, 
           y: 515,
           on: {
             pointertap: ctx.handleStartGame,
             mouseout: function() {
               this.scale.set(1, 1)
-              // console.log(this)
             },
             mouseover: function() {
               this.scale.set(1.1, 1.1)
@@ -52058,8 +53518,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const renderer = Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["createRenderer"])({
-  ..._utils_utils__WEBPACK_IMPORTED_MODULE_1__["rootOps"],
-//  patchProp
+  ..._utils_utils__WEBPACK_IMPORTED_MODULE_1__["rootOps"]
 })
 
 function createApp(rootComponent) {
@@ -52086,16 +53545,109 @@ const GAME_CONFIG = {
 
 /***/ }),
 
+/***/ "./src/utils/moveBullets.js":
+/*!**********************************!*\
+  !*** ./src/utils/moveBullets.js ***!
+  \**********************************/
+/*! exports provided: moveBullets */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "moveBullets", function() { return moveBullets; });
+/* harmony import */ var _constate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constate */ "./src/utils/constate.js");
+
+
+const bulletSpeed = 7;
+const topLine = -100;
+const bottomLine = _constate__WEBPACK_IMPORTED_MODULE_0__["GAME_CONFIG"].height + 50;
+
+const isOverBorder = (val) => {
+  if (val > bottomLine) {
+    return true;
+  }
+
+  if (val < topLine) {
+    return true;
+  }
+
+  return false;
+};
+
+const moveBullets = (bullets) => {
+  bullets.forEach((bullet, index) => {
+    const dir = bullet.dir;
+    bullet.y += bulletSpeed * dir;
+    if (isOverBorder(bullet.y)) {
+      bullets.splice(index, 1);
+    }
+  });
+};
+
+/***/ }),
+
+/***/ "./src/utils/moveEnemyPlane.js":
+/*!*************************************!*\
+  !*** ./src/utils/moveEnemyPlane.js ***!
+  \*************************************/
+/*! exports provided: moveEnemyPlane */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "moveEnemyPlane", function() { return moveEnemyPlane; });
+/* harmony import */ var _constate__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./constate */ "./src/utils/constate.js");
+
+
+const moveEnemyPlane = (enemyPlanes) => {
+  enemyPlanes.forEach((enemyPlane, index) => {
+    if (!enemyPlane.moveInfo) {
+      enemyPlane.moveInfo = {};
+      enemyPlane.moveInfo.dir = 1;
+      enemyPlane.moveInfo.count = 0;
+    }
+
+    enemyPlane.y++;
+    enemyPlane.x += 1 * enemyPlane.moveInfo.dir;
+    enemyPlane.moveInfo.count++;
+    if (enemyPlane.moveInfo.count > 120) {
+      const factor = Math.random() > 0.5 ? 1 : -1;
+      // 随机转换方向
+      enemyPlane.moveInfo.dir = enemyPlane.moveInfo.dir * factor;
+      enemyPlane.moveInfo.count = 0;
+    }
+
+    // 检测是否到边界了
+    if (isArrivedRightBorder(enemyPlane)) {
+      enemyPlane.x = _constate__WEBPACK_IMPORTED_MODULE_0__["GAME_CONFIG"].width - enemyPlane.width;
+    }
+    if (isArrivedLeftBorder(enemyPlane)) {
+      enemyPlane.x = 0;
+    }
+  });
+};
+
+function isArrivedLeftBorder(enemyPlane) {
+  return enemyPlane.x <= 0;
+}
+
+function isArrivedRightBorder(enemyPlane) {
+  return enemyPlane.x + enemyPlane.width >= _constate__WEBPACK_IMPORTED_MODULE_0__["GAME_CONFIG"].width;
+}
+
+/***/ }),
+
 /***/ "./src/utils/utils.js":
 /*!****************************!*\
   !*** ./src/utils/utils.js ***!
   \****************************/
-/*! exports provided: rootOps */
+/*! exports provided: rootOps, hitTestRectangle */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rootOps", function() { return rootOps; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hitTestRectangle", function() { return hitTestRectangle; });
 /* harmony import */ var pixi_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/pixi.es.js");
 
 
@@ -52138,6 +53690,12 @@ const rootOps = {
   },
   insert: (el, parent)=> {
     parent.addChild(el)
+  },
+  remove: (child) => {
+    const parent = child.parent;
+    if (parent) {
+      parent.removeChild(child);
+    }
   },
   patchProp: (el, key, pervValue, nextValue)=> {
     
@@ -52183,6 +53741,15 @@ const rootOps = {
   },
   parentNode: (node) => node.parentNode,
   nextSibling: (node) => node.nextSibling
+}
+
+const hitTestRectangle = (objectA, objectB)=> {
+  return (
+    objectA.x + objectA.width > objectB.x &&
+    objectA.x < objectB.x + objectB.width &&
+    objectA.y + objectA.height > objectB.y &&
+    objectA.y < objectB.y + objectB.height
+  );  
 }
 
 /***/ })

@@ -1,6 +1,6 @@
 import {createRenderer} from '@vue/runtime-core';
 
-import { rootOps, patchProp } from '../utils/utils';
+import { rootOps } from '../utils/utils';
 
 const renderer = createRenderer({
   ...rootOps
