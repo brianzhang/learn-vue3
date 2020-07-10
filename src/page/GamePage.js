@@ -10,6 +10,7 @@ import Map from '../component/Map';
 import Plane from "../component/Plane";
 import Bullet from "../component/Bullet";
 import { getGame } from '../Game';
+
 export default defineComponent({
   setup() {
     // ref 处理值类型 响应式
@@ -61,7 +62,6 @@ const useCreatePlaneInfo = ()=> {
   planeInfo.y = y
   return planeInfo
 }
-
 const handleKeyDown = (e)=> {
   const speed = 15;
   switch(e.code) {
@@ -79,7 +79,6 @@ const handleKeyDown = (e)=> {
       break;
   }
 }
-
 const useMovePlane = (initX,initY)=> {
   const point = reactive({
     x: initX,

@@ -3,16 +3,15 @@ import {
   defineComponent,
   defineAsyncComponent
 } from '@vue/runtime-core';
-import { PAGE } from '../page';
+import { PAGE } from '../page' 
 import startPage from '../../assets/start_page.jpg';
 import startBtn from '../../assets/startBtn.png';
 
 export default defineComponent({
   props: ["handleNextPage"],
-  setup(props, ctx) {
+  steup(props, ctx) {
     const handleStartGame = ()=> {
-      console.log('handleStartGame')
-      props.handleNextPage(PAGE.play)
+      props.handleNextPage('')
     }
     return {
       handleStartGame
@@ -24,17 +23,10 @@ export default defineComponent({
         h("Sprite", {texture: startPage}),
         h("Sprite", {
           texture: startBtn, 
-          x: 225, 
+          x: 230, 
           y: 515,
           on: {
-            pointertap: ctx.handleStartGame,
-            mouseout: function() {
-              this.scale.set(1, 1)
-              // console.log(this)
-            },
-            mouseover: function() {
-              this.scale.set(1.1, 1.1)
-            }
+            pointertap: ctx.handleStartGame
           },
           interactive: true,
           buttonMode: true

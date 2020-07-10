@@ -5,6 +5,7 @@ import {
 } from '@vue/runtime-core';
 import { getGame } from '../Game';
 // 地图图片 import
+import mapImg from '../../assets/map.jpg';
 
 export default defineComponent({
   setup() {
@@ -34,8 +35,8 @@ export default defineComponent({
   },
   render(ctx) {
     return h("Container", [
-      h("Sprite", {texture: '', y: ctx.mapY1.value}),
-      h("Sprite", {texture: '', y: ctx.mapY2.value})
+      h("Sprite", {texture: mapImg, y: ctx.mapY1.value}),
+      h("Sprite", {texture: mapImg, y: ctx.mapY2.value})
     ])
   }
 })
