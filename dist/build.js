@@ -53322,7 +53322,7 @@ const useFighting = ({
       enemyPlanes,
       enemyPlaneBullets,
       gameOverCallback() {
-        props.onNextPage(_page__WEBPACK_IMPORTED_MODULE_1__["PAGE"].over);
+        props.handleNextPage(_page__WEBPACK_IMPORTED_MODULE_1__["PAGE"].over);
       },
     });
 
