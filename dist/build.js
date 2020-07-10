@@ -53031,6 +53031,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = (Object(_vue_runtime_core__WEBPACK_IMPORTED_MODULE_0__["defineComponent"])({
   props: ["handleNextPage"],
   steup(props, ctx) {
+    console.log('end page....')
     const handleStartGame = ()=> {
       props.handleNextPage(_page__WEBPACK_IMPORTED_MODULE_1__["PAGE"].play)
     }
