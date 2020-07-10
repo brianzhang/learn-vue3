@@ -8,11 +8,11 @@
 
 #### 打飞机
 
-`js
+`
   npm install or yarn 
 `
 
-`js
+`
   yarn serve or npm run serve
 `
 

@@ -3,8 +3,7 @@ import {createRenderer} from '@vue/runtime-core';
 import { rootOps, patchProp } from '../utils/utils';
 
 const renderer = createRenderer({
-  ...rootOps,
-//  patchProp
+  ...rootOps
 })
 
 export function createApp(rootComponent) {

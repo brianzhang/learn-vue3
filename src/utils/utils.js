@@ -92,3 +92,7 @@ export const rootOps = {
   parentNode: (node) => node.parentNode,
   nextSibling: (node) => node.nextSibling
 }
+
+export const hitTestRectangle = ()=> {
+  
+}

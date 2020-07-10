@@ -30,7 +30,6 @@ export default defineComponent({
             pointertap: ctx.handleStartGame,
             mouseout: function() {
               this.scale.set(1, 1)
-              // console.log(this)
             },
             mouseover: function() {
               this.scale.set(1.1, 1.1)

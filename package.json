@@ -1,5 +1,5 @@
 {
-  "name": "demoVue",
+  "name": "learn-vue3",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,8 +9,8 @@
     "dev": "NODE_ENV=development webpack --watch --mode=development",
     "serve": "webpack-dev-server --open"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["vue3", "composition-api"],
+  "author": "brian.netmad@gmail.com",
   "license": "ISC",
   "dependencies": {
     "@babel/core": "^7.10.4",

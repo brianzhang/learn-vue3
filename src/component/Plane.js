@@ -2,44 +2,92 @@ import {
   h,
   ref,
   watch,
-  toRefs,
   onMounted,
   onUnmounted,
   defineComponent
 } from '@vue/runtime-core';
 import { getGame } from '../Game';
+import { useKeyboard } from "../methods";
 // 飞机图片 import
+import planeImagePath from '../../assets/plane.png';
+
+export const PlaneInfo = {
+  width:258,
+  height:364
+}
+
+// 飞机
 export default defineComponent({
-  props: ["x", "y"],
-  setup(props) {
-    const x = ref(props.x)
-    const y = ref(props.y)
-    const {x: x1, y: y1} = toRefs(props);
-    // watch(props, (value)=> {
-    //   x.value = value.x
-    //   y.value = value.y
-    // })
-    const handleAttack = (e)=> {
-      if (e.code === 'Space') {
-        ctx.emit('', ()=> {
-          
-        })
-      }
-    }
-    onMounted(()=> {
-      window.addEventListener('keydown', handleAttack)
-    })
-    onUnmounted(()=> {
-      window.removeEventListener('keydown', handleAttack)
-    })
+  props: ["x", "y", "speed"],
+  setup(props, ctx) {
+    const x = ref(props.x);
+    const y = ref(props.y);
+    watch(props, (newProps) => {
+      x.value = newProps.x;
+      y.value = newProps.y;
+    });
+
+    useAttackHandler(ctx, x, y);
+
     return {
       x,
-      y
-    }
+      y,
+    };
   },
   render(ctx) {
-    return h("Container", [
-      h("Sprite", {texture: '', x: ctx.x, y: ctx.y})
-    ])
-  }
-})
+    return h("Sprite", {
+      x: ctx.x,
+      y: ctx.y,
+      texture: planeImagePath,
+    });
+  },
+});
+
+function useAttackHandler(ctx, x, y) {
+  let isAttack = false;
+  // 攻击间隔时间
+  const ATTACK_INTERVAL = 10;
+
+  let startTime = 0;
+
+  const handleTicker = () => {
+    if (isAttack) {
+      startTime++;
+      if (startTime > ATTACK_INTERVAL) {
+        emitAttack();
+        startTime = 0;
+      }
+    }
+  };
+
+  onMounted(() => {
+    getGame().ticker.add(handleTicker);
+  });
+
+  onUnmounted(() => {
+    getGame().ticker.remove(handleTicker);
+  });
+
+  const emitAttack = () => {
+    ctx.emit("attack", {
+      x: x.value + 110,
+      y: y.value + 0,
+    });
+  };
+
+  const startAttack = () => {
+    isAttack = true;
+    startTime = 100;
+  };
+
+  const stopAttack = () => {
+    isAttack = false;
+  };
+
+  useKeyboard({
+    Space: {
+      keydown: startAttack,
+      keyup: stopAttack,
+    },
+  });
+}

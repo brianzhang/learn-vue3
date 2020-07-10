@@ -1,7 +1,6 @@
 import {
   h,
-  defineComponent,
-  defineAsyncComponent
+  defineComponent
 } from '@vue/runtime-core';
 import { PAGE } from '../page' 
 import startPage from '../../assets/start_page.jpg';
@@ -11,7 +10,7 @@ export default defineComponent({
   props: ["handleNextPage"],
   steup(props, ctx) {
     const handleStartGame = ()=> {
-      props.handleNextPage('')
+      props.handleNextPage(PAGE.play)
     }
     return {
       handleStartGame

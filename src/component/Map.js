@@ -1,42 +1,63 @@
 import {
   h,
   ref,
+  onMounted,
+  onUnmounted,
   defineComponent
 } from '@vue/runtime-core';
 import { getGame } from '../Game';
+
 // 地图图片 import
 import mapImg from '../../assets/map.jpg';
+import { GAME_CONFIG } from "../utils/constate";
 
+// 地图
 export default defineComponent({
-  setup() {
-    const mapHeight = 1080;
-    // 创建一个响应式对象 ref
-    const mapY1 = ref(0)
-    const mapY2 = ref(-mapHeight)
-    // 让地图动起来
-    // y++
-    // 循环
-    
-    const speed = 5;
-    getGame().ticker.add(()=> {
-      mapY1.value += speed;
-      mapY2.value += speed;
-      if (mapY1.value >= mapHeight) {
-        mapY1.value = 0
+  setup(props, ctx) {
+    const mapHeight = GAME_CONFIG.height;
+    let y1 = ref(0);
+    let y2 = ref(-mapHeight);
+
+    const speed = 1;
+
+    const handleTicker = () => {
+      y1.value += speed;
+      y2.value += speed;
+
+      if (y1.value >= mapHeight) {
+        y1.value = -mapHeight;
       }
-      if (mapY2.value >= mapHeight) {
-        mapY2.value = -mapHeight
+
+      if (y2.value >= mapHeight) {
+        y2.value = -mapHeight;
       }
-    })
-    return  {
-      mapY1,
-      mapY2
-    }
+    };
+
+    onMounted(() => {
+      getGame().ticker.add(handleTicker);
+    });
+
+    onUnmounted(() => {
+      getGame().ticker.remove(handleTicker);
+    });
+
+    return {
+      y1,
+      y2,
+    };
   },
   render(ctx) {
     return h("Container", [
-      h("Sprite", {texture: mapImg, y: ctx.mapY1.value}),
-      h("Sprite", {texture: mapImg, y: ctx.mapY2.value})
-    ])
-  }
-})
+      h("Sprite", {
+        y: ctx.y1,
+        texture: mapImg,
+        key: "1",
+      }),
+      h("Sprite", {
+        y: ctx.y2,
+        texture: mapImg,
+        key: "2",
+      }),
+    ]);
+  },
+});
