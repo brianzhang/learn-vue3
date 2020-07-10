@@ -19,16 +19,19 @@ const App = defineComponent({
     // ref 创建响应式对象
     // 值类型 string number bool
     const currentPageName = ref(PAGE.start)
+    // 添加背景音乐素材
     pixisound.add("StartPage", startBg)
     pixisound.add("GamePage", playBg)
     pixisound.add("EndPage", endBg)
     // 依赖别的属性的属性
     // 计算属性
     const currentPage = computed(()=> {
+      // 播放背景音乐
       pixisound.play(currentPageName.value)
       return getPageComponent(currentPageName.value)
     })
     const handleNextPage = (nextPage) => {
+      // 停止音乐
       pixisound.stopAll()
       currentPageName.value = nextPage;
     };
