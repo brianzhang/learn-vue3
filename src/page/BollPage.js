@@ -15,35 +15,36 @@ export default defineComponent({
     }
   },
   render(ctx) {
-    return h("circle", 
-    {
-      x: ctx.x, 
-      y: 100, 
-      width: 100, 
-      height: 100
-    })
+    return h("circle",
+      {
+        x: ctx.x,
+        y: 100,
+        width: 100,
+        height: 100
+      }
+    )
   }
 })
 
 // 执行ticker
-const runTicker = (handle)=> {
-  getGame().ticker.add(handle)  
+const runTicker = (handle) => {
+  getGame().ticker.add(handle)
 }
 
 // 移除ticker
-const removeTicker = (handle)=> {
-  getGame().ticker.add(handle)  
+const removeTicker = (handle) => {
+  getGame().ticker.add(handle)
 }
 
 // 创建Ticker调用
-const createTicker = ()=> {
+const createTicker = () => {
 
   const x = ref(50)     // 初始坐标
   const speed = 5       // 步长
   const maxWidht = 700  // 最大宽度
   let _arrow = true     // 方向
   // 移动回调
-  const handleTicker = ()=> {
+  const handleTicker = () => {
     x.value = _arrow ? x.value + speed : x.value - speed
     if (x.value >= maxWidht) {
       _arrow = false
@@ -53,11 +54,11 @@ const createTicker = ()=> {
     }
   }
   // 挂载
-  onMounted(()=> {
+  onMounted(() => {
     runTicker(handleTicker)
   })
   // 销毁
-  onUnmounted(()=> {
+  onUnmounted(() => {
     removeTicker(handleTicker)
   })
   return x

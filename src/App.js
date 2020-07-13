@@ -6,7 +6,7 @@ import {
 } from '@vue/runtime-core';
 import pixisound from 'pixi-sound';
 
-import {PAGE, getPageComponent } from './page'
+import { PAGE, getPageComponent } from './page'
 import startBg from '../assets/bgm.mp3';
 import playBg from '../assets/play.mp3';
 import endBg from '../assets/end.mp3';
@@ -25,7 +25,7 @@ const App = defineComponent({
     pixisound.add("EndPage", endBg)
     // 依赖别的属性的属性
     // 计算属性
-    const currentPage = computed(()=> {
+    const currentPage = computed(() => {
       // 播放背景音乐
       pixisound.play(currentPageName.value)
       return getPageComponent(currentPageName.value)
@@ -44,7 +44,7 @@ const App = defineComponent({
   render(ctx) {
     console.log(ctx.currentPage)
     return h('Container', [
-      h(ctx.currentPage, {handleNextPage: ctx.handleNextPage})
+      h(ctx.currentPage, { handleNextPage: ctx.handleNextPage })
     ])
   }
 })

@@ -5,19 +5,18 @@ import {
   onUnmounted,
   defineComponent
 } from '@vue/runtime-core';
-import PIXI from 'pixi-sound';
 import { PAGE } from '../page';
 import { getGame } from '../Game';
 import Map from '../component/Map';
 import TWEEN from "@tweenjs/tween.js";
-import Plane, {PlaneInfo} from "../component/Plane";
 import { useKeyboardMove } from "../methods";
 import { GAME_CONFIG } from "../utils/constate";
 import { hitTestRectangle } from '../utils/utils';
 import { moveBullets } from '../utils/moveBullets';
+import Plane, { PlaneInfo } from "../component/Plane";
 import { moveEnemyPlane } from '../utils/moveEnemyPlane';
-import EnemyPlane, {EnemyPlaneInfo} from "../component/EnemyPlane";
-import Bullet, {SelfBulletInfo, EnemyBulletInfo} from "../component/Bullet";
+import EnemyPlane, { EnemyPlaneInfo } from "../component/EnemyPlane";
+import Bullet, { SelfBulletInfo, EnemyBulletInfo } from "../component/Bullet";
 
 let hashCode = 0;
 const createHashCode = () => {
@@ -269,7 +268,7 @@ export default defineComponent({
         width: info.width,
         height: info.height,
         key: `Bullet${info.id}`,
-        rotation: info.rotation,        
+        rotation: info.rotation,
         onDestroy({ id }) {
           ctx.destroySelfBullet(id);
         },

@@ -12,8 +12,8 @@ import { useKeyboard } from "../methods";
 import planeImagePath from '../../assets/plane.png';
 
 export const PlaneInfo = {
-  width:258,
-  height:364
+  width: 258,
+  height: 364
 }
 
 // 飞机

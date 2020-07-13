@@ -5,7 +5,7 @@ const game = new Application(GAME_CONFIG)
 
 document.body.appendChild(game.view)
 
-export function getCanvasRootContainer () {
+export function getCanvasRootContainer() {
   return game.stage
 }
 

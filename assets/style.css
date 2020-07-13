@@ -1,5 +1,12 @@
-*, html, body{
+*,
+html,
+body {
   margin: 0px;
   padding: 0px;
   outline: none;
+}
+
+canvas {
+  height: 100%;
+  width: 100%;
 }
